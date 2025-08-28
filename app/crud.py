@@ -31,4 +31,40 @@ def list_employees_by_quarter():
     print(dataframe)
 
 
-list_employees_by_quarter()
+
+def list_mean_hired_employees():
+    conn = get_connection()
+    dataframe = pd.read_sql(
+        sql="""
+            SELECT
+                d.id,
+                d.name,
+                COUNT(he.id) AS mean_he
+            FROM
+                departments AS d
+                INNER JOIN hired_employees as he ON he.department_id=d.id
+                INNER JOIN jobs as j ON he.job_id=j.id
+            GROUP BY
+                d.id,
+                d.name
+            HAVING COUNT(he.id) >= (SELECT AVG(temp_table.he_number) FROM (
+                SELECT
+                    d.id,
+                    d.name,
+                    COUNT(he.id) AS he_number
+                FROM
+                    departments AS d
+                    INNER JOIN hired_employees as he ON he.department_id=d.id
+                    INNER JOIN jobs as j ON he.job_id=j.id
+                GROUP BY
+                    d.id,
+                    d.name
+            ) AS temp_table
+        )
+        """,
+        con=conn
+    )
+    print(dataframe)
+
+# list_employees_by_quarter()
+list_mean_hired_employees()
