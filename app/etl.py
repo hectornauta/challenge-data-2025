@@ -11,7 +11,7 @@ def etl_tables():
             'csv_file': base_path + 'departments.csv',
             'columns': {
                 'id': 'Int64',
-                'department': str
+                'name': str
             }
         },
         'hired_employees': {
@@ -28,7 +28,7 @@ def etl_tables():
             'csv_file': base_path + 'jobs.csv',
             'columns': {
                 'id': 'Int64',
-                'job': str
+                'name': str
             }
         }
     }
