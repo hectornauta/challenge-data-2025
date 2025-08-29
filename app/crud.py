@@ -1,5 +1,52 @@
-from db import get_connection
+from app.db import get_connection
 import pandas as pd
+
+
+def add_jobs(list_jobs: list):
+    conn = get_connection()
+    collection_jobs = [{'id': x.id, 'name': x.name} for x in list_jobs]
+    dataframe = pd.DataFrame(collection_jobs)
+    dataframe.to_sql(
+        'jobs',
+        conn,
+        if_exists='append',
+        index=False
+    )
+    conn.close()
+
+
+def add_hired_employees(list_hired_employees: list):
+    conn = get_connection()
+    collection_hired_employees = [
+        {
+            'id': x.id,
+            'name': x.name,
+            'datetime': x.datetime,
+            'department_id': x.department_id,
+            'job_id': x.job_id
+        } for x in list_hired_employees
+    ]
+    dataframe = pd.DataFrame(collection_hired_employees)
+    dataframe.to_sql(
+        'hired_employees',
+        conn,
+        if_exists='append',
+        index=False
+    )
+    conn.close()
+
+
+def add_departments(list_departments: list):
+    conn = get_connection()
+    collection_departments = [{'id': x.id, 'name': x.name} for x in list_departments]
+    dataframe = pd.DataFrame(collection_departments)
+    dataframe.to_sql(
+        'departments',
+        conn,
+        if_exists='append',
+        index=False
+    )
+    conn.close()
 
 
 def list_employees_by_quarter():
@@ -67,4 +114,4 @@ def list_mean_hired_employees():
     print(dataframe)
 
 # list_employees_by_quarter()
-list_mean_hired_employees()
+# list_mean_hired_employees()
