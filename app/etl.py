@@ -1,9 +1,12 @@
 import pandas as pd
-from db import get_connection
+from app.db import get_connection
 from typing import Optional, Dict
 
 
 def etl_tables():
+    """
+    Realiza una carga masiva de archivos CSV a la base de datos SQL
+    """
     base_path = 'data/'
     # Hacemos un diccionario de la fconfiguración de cada archivo, con Int64 porque tiene nulos
     dict_files = {
@@ -38,6 +41,9 @@ def etl_tables():
         
 
 def process_entity(entity_name: str, entity_config: Dict):
+    """
+    Realiza la carga individual de una entidad
+    """
     # Armamos la ruta completa
     filepath = entity_config['csv_file']
     try:
@@ -61,5 +67,3 @@ def process_entity(entity_name: str, entity_config: Dict):
         index=False
     )
     conn.close()
-
-etl_tables()
